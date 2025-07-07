@@ -1,0 +1,29 @@
+name: Sync Amrod to Woo
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run sync
+        env:
+          AMROD_API_URL: ${{ secrets.AMROD_API_URL }}
+          AMROD_AUTH: ${{ secrets.AMROD_AUTH }}
+          WOO_URL: ${{ secrets.WOO_URL }}
+          WOO_AUTH: ${{ secrets.WOO_AUTH }}
+        run: npm start
